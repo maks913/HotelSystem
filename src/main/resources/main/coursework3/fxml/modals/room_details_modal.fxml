@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="550.0" prefWidth="450.0" styleClass="content-area" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.coursework3.controllers.modals.RoomDetailsController">
+    <stylesheets>
+        <URL value="@../../css/style.css"/>
+    </stylesheets>
+    <VBox spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
+          AnchorPane.topAnchor="15.0">
+        <Label text="Деталі кімнати" textFill="#2c3e50">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+
+        <GridPane hgap="10.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <Label text="Номер кімнати*:"/>
+            <TextField fx:id="txtRoomNumber" GridPane.columnIndex="1"/>
+
+            <Label text="Поверх:" GridPane.rowIndex="1"/>
+            <TextField fx:id="txtFloor" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Клас*:" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="comboClass" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Вартість за добу*:" GridPane.rowIndex="3"/>
+            <TextField fx:id="txtCost" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Місткість (чол.):" GridPane.rowIndex="5"/>
+            <TextField fx:id="txtCapacity" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <Label text="Поточний статус:" GridPane.rowIndex="4"/>
+            <ComboBox fx:id="comboStatus" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        </GridPane>
+
+        <Label text="Встановлені прилади (Оснащення):" textFill="#2c3e50">
+            <font>
+                <Font name="System Italic" size="14.0"/>
+            </font>
+        </Label>
+
+        <TableView fx:id="appliancesTable" prefHeight="150.0" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colAppName" prefWidth="150.0" text="Назва приладу"/>
+                <TableColumn fx:id="colAppCondition" prefWidth="150.0" text="Технічний стан"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+        <HBox spacing="10.0">
+            <Button fx:id="btnAddAppliance" mnemonicParsing="false" onAction="#handleAddAppliance" text="➕ Додати прилад"/>
+            <Button fx:id="btnRemoveAppliance" mnemonicParsing="false" onAction="#handleRemoveAppliance" text="🗑️ Видалити"/>
+        </HBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" styleClass="btn-logout" text="Скасувати"/>
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSave" styleClass="btn-action" text="Зберегти"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

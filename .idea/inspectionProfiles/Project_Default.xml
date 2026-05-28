@@ -1,0 +1,47 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myCustomPropertiesEnabled" value="true" />
+      <option name="myIgnoreVendorSpecificProperties" value="false" />
+      <option name="myCustomPropertiesList">
+        <value>
+          <list size="14">
+            <item index="0" class="java.lang.String" itemvalue="-fx-background-color" />
+            <item index="1" class="java.lang.String" itemvalue="-fx-text-fill" />
+            <item index="2" class="java.lang.String" itemvalue="-fx-font-size" />
+            <item index="3" class="java.lang.String" itemvalue="-fx-alignment" />
+            <item index="4" class="java.lang.String" itemvalue="-fx-padding" />
+            <item index="5" class="java.lang.String" itemvalue="-fx-cursor" />
+            <item index="6" class="java.lang.String" itemvalue="-fx-background-radius" />
+            <item index="7" class="java.lang.String" itemvalue="-fx-base" />
+            <item index="8" class="java.lang.String" itemvalue="-fx-control-inner-background" />
+            <item index="9" class="java.lang.String" itemvalue="-fx-table-cell-border-color" />
+            <item index="10" class="java.lang.String" itemvalue="-fx-font-weight" />
+            <item index="11" class="java.lang.String" itemvalue="-fx-min-width" />
+            <item index="12" class="java.lang.String" itemvalue="-fx-min-height" />
+            <item index="13" class="java.lang.String" itemvalue="-fx-border-color" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="courseWork3" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="com.google.protobuf:protobuf-java:3.25.1" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

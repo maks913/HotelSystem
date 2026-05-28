@@ -1,0 +1,108 @@
+
+.content-area {
+    -fx-background-color: #ecf0f1;
+}
+
+.sidebar {
+    -fx-background-color: #2c3e50;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 20;
+}
+
+.menu-button:hover {
+    -fx-background-color: #34495e;
+    -fx-cursor: hand;
+}
+
+.btn-logout {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+}
+
+.btn-logout:hover {
+    -fx-background-color: #c0392b;
+}
+
+.btn-action {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+
+.btn-action:hover {
+    -fx-background-color: #2980b9;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-base: #ecf0f1;
+    -fx-control-inner-background: #ffffff;
+    -fx-table-cell-border-color: #bdc3c7;
+}
+.table-view .column-header {
+    -fx-background-color: #34495e;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.chess-cell {
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-alignment: center;
+    -fx-border-color: #bdc3c7;
+    -fx-font-size: 11px;
+}
+
+.room-header-cell {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 80px;
+}
+
+.date-header-cell {
+    -fx-background-color: #f8f9fa;
+    -fx-font-weight: bold;
+}
+
+.status-free { -fx-background-color: #2ecc71; }
+.status-occupied { -fx-background-color: #e74c3c; }
+.status-booked { -fx-background-color: #f1c40f; }
+.status-repair { -fx-background-color: #95a5a6; }
+
+.btn-cancel {
+    -fx-background-color: #bdc3c7;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+.btn-cancel:hover {
+    -fx-background-color: #95a5a6;
+}
+
+.btn-success {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+.btn-success:hover {
+    -fx-background-color: #27ae60;
+}
+
+.btn-warning {
+    -fx-background-color: #e67e22;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+.btn-warning:hover {
+    -fx-background-color: #d35400;
+}

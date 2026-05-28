@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.coursework3.controllers.MainController">
+
+    <stylesheets>
+        <URL value="@../css/style.css" />
+    </stylesheets>
+
+    <left>
+        <VBox prefHeight="600.0" prefWidth="220.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" prefHeight="80.0" prefWidth="220.0" text="Hotel System" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+
+            <Button fx:id="btnRooms" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="🏨 Управління номерним фондом" wrapText="true" />
+
+            <Button fx:id="btnClients" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="👥 Управління клієнтами" />
+
+            <Button fx:id="btnFreeNumber" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="🔎 Пошук вільного номеру" textAlignment="JUSTIFY" />
+
+            <Button fx:id="btnBookings" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="📅 Управління бронюванням" />
+
+            <Button fx:id="btnSettlements" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="🏨 Реєстрація проживання та виселення" wrapText="true" />
+
+            <Button fx:id="btnChess" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" styleClass="menu-button" text="🏁 Формування звіту" />
+
+            <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
+                <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" styleClass="btn-logout" text="Вийти">
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <AnchorPane fx:id="contentArea" prefHeight="200.0" prefWidth="200.0" styleClass="content-area" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" layoutX="185.0" layoutY="210.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Label text="Вітаємо в системі управління готелем" textFill="#2c3e50">
+                    <font>
+                        <Font size="22.0" />
+                    </font>
+                </Label>
+                <Label text="Виберіть розділ у меню зліва для початку роботи" textFill="#7f8c8d" />
+            </VBox>
+        </AnchorPane>
+    </center>
+</BorderPane>
