@@ -26,20 +26,32 @@ import java.util.ResourceBundle;
 public class RoomFundController implements Initializable {
     private static final String FILTER_ALL = "Всі";
 
-    @FXML private TableView<Rooms> roomsTable;
-    @FXML private TableColumn<Rooms, String> colRoomNumber;
-    @FXML private TableColumn<Rooms, Integer> colFloor;
-    @FXML private TableColumn<Rooms, String> colClass;
-    @FXML private TableColumn<Rooms, Double> colPrice;
-    @FXML private TableColumn<Rooms, Integer> colCapacity;
-    @FXML private TableColumn<Rooms, String> colStatus;
+    @FXML
+    private TableView<Rooms> roomsTable;
+    @FXML
+    private TableColumn<Rooms, String> colRoomNumber;
+    @FXML
+    private TableColumn<Rooms, Integer> colFloor;
+    @FXML
+    private TableColumn<Rooms, String> colClass;
+    @FXML
+    private TableColumn<Rooms, Double> colPrice;
+    @FXML
+    private TableColumn<Rooms, Integer> colCapacity;
+    @FXML
+    private TableColumn<Rooms, String> colStatus;
 
-    @FXML private ComboBox<String> filterClass;
-    @FXML private ComboBox<String> filterStatus;
+    @FXML
+    private ComboBox<String> filterClass;
+    @FXML
+    private ComboBox<String> filterStatus;
 
-    @FXML private Button btnAddRoom;
-    @FXML private Button btnEditRoom;
-    @FXML private Button btnDeleteRoom;
+    @FXML
+    private Button btnAddRoom;
+    @FXML
+    private Button btnEditRoom;
+    @FXML
+    private Button btnDeleteRoom;
 
     private final Alerts alerts = new Alerts();
     private final RoomDAO roomDAO = new RoomDAO();
@@ -54,7 +66,9 @@ public class RoomFundController implements Initializable {
         loadData();
     }
 
-    /** Прив'язує стовпці таблиці до властивостей моделі. */
+    /**
+     * Прив'язує стовпці таблиці до властивостей моделі.
+     */
     private void setupTableColumns() {
         colRoomNumber.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRoomNumber()));
         colFloor.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getFloor()).asObject());
@@ -64,7 +78,9 @@ public class RoomFundController implements Initializable {
         colStatus.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }
 
-    /** Ініціалізує ComboBox-фільтри та слухачі змін. */
+    /**
+     * Ініціалізує ComboBox-фільтри та слухачі змін.
+     */
     private void setupFilters() {
         filterClass.setItems(FXCollections.observableArrayList(FILTER_ALL, "Економ", "Стандарт", "Напів-Люкс", "Люкс"));
         filterStatus.setItems(FXCollections.observableArrayList(FILTER_ALL, RoomDAO.STATUS_FREE, RoomDAO.STATUS_OCCUPIED, RoomDAO.STATUS_BOOKED, "Ремонт"));
@@ -74,7 +90,9 @@ public class RoomFundController implements Initializable {
         filterStatus.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> applyFilters());
     }
 
-    /** Реєструє обробники подій для кнопок та подвійного кліку. */
+    /**
+     * Реєструє обробники подій для кнопок та подвійного кліку.
+     */
     private void setupEventHandlers() {
         btnAddRoom.setOnAction(event -> openRoomDetailsModal(null));
 
@@ -100,7 +118,9 @@ public class RoomFundController implements Initializable {
         });
     }
 
-    /** Завантажує дані з БД та відображає у таблиці. */
+    /**
+     * Завантажує дані з БД та відображає у таблиці.
+     */
     private void loadData() {
         try {
             settlementService.runRoomAutoUpdate();
@@ -112,7 +132,9 @@ public class RoomFundController implements Initializable {
         }
     }
 
-    /** Застосовує вибрані фільтри та оновлює таблицю. */
+    /**
+     * Застосовує вибрані фільтри та оновлює таблицю.
+     */
     private void applyFilters() {
         String selectedClass = filterClass.getValue();
         String selectedStatus = filterStatus.getValue();
@@ -164,7 +186,9 @@ public class RoomFundController implements Initializable {
         }
     }
 
-    /**Видалення кімнати зі списку */
+    /**
+     * Видалення кімнати зі списку
+     */
     private void handleDeleteRoom() {
         Rooms selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
         if (selectedRoom == null) {

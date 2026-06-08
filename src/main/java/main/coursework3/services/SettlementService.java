@@ -9,6 +9,7 @@ import main.coursework3.model.Clients;
 import main.coursework3.model.Rooms;
 import main.coursework3.model.Settlements;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,7 @@ public class SettlementService {
     public boolean updateSettlementFull(Settlements settlement) {
         return settlementDAO.updateSettlementFull(settlement);
     }
+
     public void runRoomAutoUpdate() {
         runFullHotelAutoUpdate();
     }
@@ -266,5 +268,159 @@ public class SettlementService {
     public void runFullHotelAutoUpdate() {
         runSettlementAutoUpdateJava();
         runRoomAutoUpdateJava();
+    }
+
+    /**
+     * Перевіряє, чи відповідає заселення критеріям пошуку та фільтрації.
+     */
+    public boolean matchesFilter(Settlements settlement, String searchText, boolean showCompleted) {
+        Date leavingDate = settlement.getFactOfLeaving();
+        if (leavingDate != null) {
+            LocalDate lDate = leavingDate.toLocalDate();
+            LocalDate today = LocalDate.now();
+            if (!showCompleted && (lDate.isBefore(today) || lDate.isEqual(today))) {
+                if ("Оплачено".equalsIgnoreCase(settlement.getPaymentStatus())) {
+                    return false;
+                }
+            }
+        }
+
+        if (!searchText.isEmpty()) {
+            String clientName = getClientName(settlement.getIdClient()).toLowerCase();
+            if (!clientName.contains(searchText)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // -------------------------------------------------------------------------
+    // Логіка з CheckInController
+    // -------------------------------------------------------------------------
+
+    /**
+     * Результат операції збереження поселення.
+     */
+    public static class SettlementSaveResult {
+        public final boolean success;
+        public final String errorTitle;
+        public final String errorMessage;
+
+        private SettlementSaveResult(boolean success, String errorTitle, String errorMessage) {
+            this.success = success;
+            this.errorTitle = errorTitle;
+            this.errorMessage = errorMessage;
+        }
+
+        public static SettlementSaveResult ok() {
+            return new SettlementSaveResult(true, null, null);
+        }
+
+        public static SettlementSaveResult error(String title, String message) {
+            return new SettlementSaveResult(false, title, message);
+        }
+    }
+
+    /**
+     * Перевіряє, чи дозволено пряме поселення на вказану дату.
+     */
+    public boolean isCheckInDateValid(LocalDate arrivalDate) {
+        return arrivalDate == null || !arrivalDate.isAfter(LocalDate.now());
+    }
+
+    /**
+     * Перевіряє, чи вибрана кімната доступна для поселення.
+     */
+    public boolean isRoomAvailable(Rooms selectedRoom, LocalDate arrival, LocalDate departure,
+                                   int currentSettlementId, Rooms initialRoomRef) {
+        List<Rooms> freeRooms = findAvailableRoomsByDates(arrival, departure);
+        boolean isRoomFree = freeRooms.stream()
+                .anyMatch(r -> r.getIdRoom() == selectedRoom.getIdRoom());
+
+        if (currentSettlementId > 0 && initialRoomRef != null) {
+            boolean isSameRoom = (selectedRoom.getIdRoom() == initialRoomRef.getIdRoom());
+            return isRoomFree || isSameRoom;
+        }
+
+        return isRoomFree;
+    }
+
+    /**
+     * Зберігає поселення: розраховує вартість
+     */
+    public SettlementSaveResult saveSettlement(int currentSettlementId, int clientId, Rooms selectedRoom,
+                                               LocalDate arrivalDate, LocalDate dateLeaving, String paymentStatus) {
+        int days = calculateNights(arrivalDate, dateLeaving);
+        double totalCost = days * selectedRoom.getCostPerDay();
+
+        Settlements settlement = new Settlements(
+                currentSettlementId,
+                clientId,
+                selectedRoom.getIdRoom(),
+                java.sql.Date.valueOf(arrivalDate),
+                java.sql.Date.valueOf(dateLeaving),
+                totalCost,
+                paymentStatus
+        );
+
+        boolean success;
+        if (currentSettlementId == 0) {
+            success = insertSettlement(settlement);
+            if (success) {
+                updateRoomStatusById(selectedRoom.getIdRoom(), RoomDAO.STATUS_OCCUPIED);
+            }
+        } else {
+            success = updateSettlementFull(settlement);
+        }
+
+        if (!success) {
+            return SettlementSaveResult.error("Помилка бази даних", "СУБД відхилила запис проживання.");
+        }
+
+        runRoomAutoUpdate();
+        return SettlementSaveResult.ok();
+    }
+
+    // -------------------------------------------------------------------------
+    // Фінансові розрахунки Check-Out
+    // -------------------------------------------------------------------------
+
+    /**
+     * Результат фінансового перерахунку при виселенні.
+     */
+    public static class CheckOutFinances {
+        public final int nights;
+        public final double totalCost;
+        public final double depositUsed;
+        public final double finalPayment;
+
+        public CheckOutFinances(int nights, double totalCost, double depositUsed, double finalPayment) {
+            this.nights = nights;
+            this.totalCost = totalCost;
+            this.depositUsed = depositUsed;
+            this.finalPayment = finalPayment;
+        }
+    }
+
+    /**
+     * Розраховує фінанси виселення: вартість за ночі, залік депозиту, фінальна сума.
+     */
+    public CheckOutFinances calculateCheckOutFinances(LocalDate arrival, LocalDate departure,
+                                                      double pricePerDay, double deposit) {
+        int nights = calculateNights(arrival, departure);
+        double totalCost = nights * pricePerDay;
+        double finalPayment = Math.max(totalCost - deposit, 0.0);
+        return new CheckOutFinances(nights, totalCost, deposit, finalPayment);
+    }
+
+    /**
+     * Розраховує ціну за добу з наявного поселення.
+     */
+    public double resolvePricePerDay(Settlements settlement) {
+        LocalDate start = settlement.getFactOfArrival().toLocalDate();
+        LocalDate end = settlement.getFactOfLeaving().toLocalDate();
+        int initialNights = calculateNights(start, end);
+        return settlement.getTotalCost() / initialNights;
     }
 }

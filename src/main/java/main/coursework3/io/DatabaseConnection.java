@@ -55,7 +55,10 @@ public class DatabaseConnection {
             return null;
         }
     }
-    /** Закриває поточне з'єднання з БД. */
+
+    /**
+     * Закриває поточне з'єднання з БД.
+     */
     public static void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {

@@ -6,24 +6,37 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.Map;
 
 public class Reports {
     public static int convertMonthToNumber(String monthName) {
         switch (monthName.trim().toLowerCase()) {
-            case "січень": return 1;
-            case "лютий": return 2;
-            case "березень": return 3;
-            case "квітень": return 4;
-            case "травень": return 5;
-            case "червень": return 6;
-            case "липень": return 7;
-            case "серпень": return 8;
-            case "вересень": return 9;
-            case "жовтень": return 10;
-            case "листопад": return 11;
-            case "грудень": return 12;
+            case "січень":
+                return 1;
+            case "лютий":
+                return 2;
+            case "березень":
+                return 3;
+            case "квітень":
+                return 4;
+            case "травень":
+                return 5;
+            case "червень":
+                return 6;
+            case "липень":
+                return 7;
+            case "серпень":
+                return 8;
+            case "вересень":
+                return 9;
+            case "жовтень":
+                return 10;
+            case "листопад":
+                return 11;
+            case "грудень":
+                return 12;
             default:
                 try {
                     return Integer.parseInt(monthName);
@@ -132,5 +145,14 @@ public class Reports {
         }
 
         return sb.toString();
+    }
+
+    public static Color forStatus(String status) {
+        return switch (status) {
+            case "Зайнята" -> Color.web("#e74c3c");
+            case "Заброньована" -> Color.web("#f1c40f");
+            case "Ремонт" -> Color.web("#95a5a6");
+            default -> Color.web("#27ae60");
+        };
     }
 }

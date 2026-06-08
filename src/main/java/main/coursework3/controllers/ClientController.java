@@ -28,22 +28,34 @@ import java.util.ResourceBundle;
 
 public class ClientController implements Initializable {
 
-    @FXML private TextField searchField;
-    @FXML private Button btnAddClient;
-    @FXML private TableView<Clients> clientsTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button btnAddClient;
+    @FXML
+    private TableView<Clients> clientsTable;
 
-    @FXML private TableColumn<Clients, Integer> colId;
-    @FXML private TableColumn<Clients, String> colPib;
-    @FXML private TableColumn<Clients, String> colPassportSeria;
-    @FXML private TableColumn<Clients, String> colPassportNumber;
-    @FXML private TableColumn<Clients, String> colPhone;
-    @FXML private TableColumn<Clients, LocalDate> colBirthday;
+    @FXML
+    private TableColumn<Clients, Integer> colId;
+    @FXML
+    private TableColumn<Clients, String> colPib;
+    @FXML
+    private TableColumn<Clients, String> colPassportSeria;
+    @FXML
+    private TableColumn<Clients, String> colPassportNumber;
+    @FXML
+    private TableColumn<Clients, String> colPhone;
+    @FXML
+    private TableColumn<Clients, LocalDate> colBirthday;
 
     private final ClientDAO clientDAO = new ClientDAO();
     private final Alerts alerts = new Alerts();
 
     private final ObservableList<Clients> masterData = FXCollections.observableArrayList();
-    /** Ініціалізація контролера та налаштування таблиці, дій і пошуку. */
+
+    /**
+     * Ініціалізація контролера та налаштування таблиці, дій і пошуку.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTableColumns();
@@ -53,7 +65,10 @@ public class ClientController implements Initializable {
 
         loadData();
     }
-    /** Налаштування колонок таблиці клієнтів. */
+
+    /**
+     * Налаштування колонок таблиці клієнтів.
+     */
     private void setupTableColumns() {
         colId.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdClient()).asObject());
         colPib.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPib()));
@@ -62,7 +77,10 @@ public class ClientController implements Initializable {
         colPhone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhoneNumber()));
         colBirthday.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateOfBirth().toLocalDate()));
     }
-    /** Налаштування кнопок та подвійного кліку по рядку таблиці. */
+
+    /**
+     * Налаштування кнопок та подвійного кліку по рядку таблиці.
+     */
     private void setupActions() {
         btnAddClient.setOnAction(e -> openClientDetailsModal(null));
 
@@ -76,7 +94,10 @@ public class ClientController implements Initializable {
             return row;
         });
     }
-    /** Створення контекстного меню для таблиці клієнтів. */
+
+    /**
+     * Створення контекстного меню для таблиці клієнтів.
+     */
     private void setupContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("❌ Видалити клієнта");
@@ -85,7 +106,10 @@ public class ClientController implements Initializable {
 
         clientsTable.setContextMenu(contextMenu);
     }
-    /** Завантаження списку клієнтів із бази даних. */
+
+    /**
+     * Завантаження списку клієнтів із бази даних.
+     */
     private void loadData() {
         try {
             masterData.setAll(clientDAO.findAll());
@@ -94,7 +118,10 @@ public class ClientController implements Initializable {
             alerts.showError("Помилка БД", "Не вдалося завантажити список клієнтів:\n" + e.getMessage());
         }
     }
-    /** Налаштування пошуку та фільтрації клієнтів. */
+
+    /**
+     * Налаштування пошуку та фільтрації клієнтів.
+     */
     private void setupSearchFilter() {
         try {
             List<Clients> initialList = clientDAO.findAll();
@@ -129,7 +156,10 @@ public class ClientController implements Initializable {
             }
         });
     }
-    /** Відкриття модального вікна для додавання або редагування клієнта. */
+
+    /**
+     * Відкриття модального вікна для додавання або редагування клієнта.
+     */
     private void openClientDetailsModal(Clients client) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/coursework3/fxml/modals/client_details_modal.fxml"));
@@ -155,7 +185,10 @@ public class ClientController implements Initializable {
             alerts.showError("Помилка завантажения вікна", "Не вдалося відкрити форму деталей клієнта:\n" + e.getMessage());
         }
     }
-    /** Видалення обраного клієнта з бази даних. */
+
+    /**
+     * Видалення обраного клієнта з бази даних.
+     */
     private void handleDeleteClient() {
         Clients selectedClient = clientsTable.getSelectionModel().getSelectedItem();
         if (selectedClient == null) {

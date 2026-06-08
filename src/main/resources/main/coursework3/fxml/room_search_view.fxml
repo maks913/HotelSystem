@@ -6,68 +6,73 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.coursework3.controllers.RoomSearchController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.coursework3.controllers.RoomSearchController">
     <stylesheets>
-        <URL value="@../css/style.css" />
+        <URL value="@../css/style.css"/>
     </stylesheets>
 
-    <VBox spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+    <VBox spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
+          AnchorPane.topAnchor="15.0">
         <Label text="Пошук та підбір вільного номерного фонду">
             <font>
-                <Font name="System Bold" size="18.0" />
+                <Font name="System Bold" size="18.0"/>
             </font>
         </Label>
 
-        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 10;">
+        <HBox alignment="CENTER_LEFT" spacing="15.0"
+              style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 10;">
             <VBox spacing="5.0">
-                <Label text="Дата заїзду:" />
-                <DatePicker fx:id="dpDateFrom" prefWidth="130.0" />
+                <Label text="Дата заїзду:"/>
+                <DatePicker fx:id="dpDateFrom" prefWidth="130.0"/>
             </VBox>
             <VBox spacing="5.0">
-                <Label text="Дата виїзду:" />
-                <DatePicker fx:id="dpDateTo" prefWidth="130.0" />
+                <Label text="Дата виїзду:"/>
+                <DatePicker fx:id="dpDateTo" prefWidth="130.0"/>
             </VBox>
             <VBox spacing="5.0">
-                <Label text="Категорія номера:" />
-                <ComboBox fx:id="cmbRoomClass" prefWidth="130.0" promptText="Оберіть клас..." />
+                <Label text="Категорія номера:"/>
+                <ComboBox fx:id="cmbRoomClass" prefWidth="130.0" promptText="Оберіть клас..."/>
             </VBox>
             <VBox spacing="5.0">
-                <Label text="Макс. ціна:" />
-                <TextField fx:id="txtMaxPrice" prefWidth="100.0" promptText="грн..." />
+                <Label text="Макс. ціна:"/>
+                <TextField fx:id="txtMaxPrice" prefWidth="100.0" promptText="грн..."/>
             </VBox>
 
-            <Button fx:id="handleSearch" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Пошук">
+            <Button fx:id="handleSearch" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Пошук">
                 <HBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </HBox.margin>
                 <font>
-                    <Font name="System Bold" size="13.0" />
+                    <Font name="System Bold" size="13.0"/>
                 </font>
             </Button>
 
-            <Button fx:id="btnClear" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Очистити">
+            <Button fx:id="btnClear" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Очистити">
                 <HBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </HBox.margin>
                 <font>
-                    <Font name="System Bold" size="13.0" />
+                    <Font name="System Bold" size="13.0"/>
                 </font>
             </Button>
         </HBox>
 
         <Label text="Доступні номери на вказані дати:">
             <font>
-                <Font name="System Bold" size="14.0" />
+                <Font name="System Bold" size="14.0"/>
             </font>
         </Label>
         <TableView fx:id="roomsTable" prefHeight="300.0" prefWidth="770.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colRoomNumber" prefWidth="120.0" text="Номер кімнати" />
-                <TableColumn fx:id="colFloor" prefWidth="120.0" text="Поверх" />
-                <TableColumn fx:id="colClass" prefWidth="200.0" text="Клас" />
-                <TableColumn fx:id="colCapacity" prefWidth="200.0" text="Місткість" />
-                <TableColumn fx:id="colPrice" prefWidth="150.0" text="Ціна за добу" />
-                <TableColumn fx:id="colStatus" prefWidth="150.0" text="Статус" />
+                <TableColumn fx:id="colRoomNumber" prefWidth="120.0" text="Номер кімнати"/>
+                <TableColumn fx:id="colFloor" prefWidth="120.0" text="Поверх"/>
+                <TableColumn fx:id="colClass" prefWidth="200.0" text="Клас"/>
+                <TableColumn fx:id="colCapacity" prefWidth="200.0" text="Місткість"/>
+                <TableColumn fx:id="colPrice" prefWidth="150.0" text="Ціна за добу"/>
+                <TableColumn fx:id="colStatus" prefWidth="150.0" text="Статус"/>
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
@@ -75,14 +80,16 @@
         </TableView>
 
         <HBox alignment="CENTER_RIGHT" spacing="15.0">
-            <Button fx:id="btnCreateBooking" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Створити бронювання">
+            <Button fx:id="btnCreateBooking" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Створити бронювання">
                 <font>
-                    <Font name="System Bold" size="13.0" />
+                    <Font name="System Bold" size="13.0"/>
                 </font>
             </Button>
-            <Button fx:id="btnCheckIn" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #FF9800; -fx-text-fill: white;" text="Оформити поселення">
+            <Button fx:id="btnCheckIn" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0"
+                    style="-fx-background-color: #FF9800; -fx-text-fill: white;" text="Оформити поселення">
                 <font>
-                    <Font name="System Bold" size="13.0" />
+                    <Font name="System Bold" size="13.0"/>
                 </font>
             </Button>
         </HBox>

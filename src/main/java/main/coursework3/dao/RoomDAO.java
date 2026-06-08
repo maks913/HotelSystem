@@ -44,7 +44,9 @@ public class RoomDAO {
             "    AND s.fact_of_arrival < ? " +
             ")";
 
-    /** Додає нову кімнату до бази даних. */
+    /**
+     * Додає нову кімнату до бази даних.
+     */
     public void insertRoom(Rooms room) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_ROOM)) {
@@ -54,7 +56,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка при додаванні кімнати", e);
         }
     }
-    /** Оновлює параметри існуючої кімнати. */
+
+    /**
+     * Оновлює параметри існуючої кімнати.
+     */
     public void updateRoom(Rooms room) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_ROOM)) {
@@ -65,7 +70,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка при оновленні кімнати", e);
         }
     }
-    /** Видаляє кімнату з бази даних за її ідентифікатором. */
+
+    /**
+     * Видаляє кімнату з бази даних за її ідентифікатором.
+     */
     public void deleteRoom(int idRoom) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_ROOM)) {
@@ -75,7 +83,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка при видаленні кімнати", e);
         }
     }
-    /** Отримує список усіх кімнат готелю. */
+
+    /**
+     * Отримує список усіх кімнат готелю.
+     */
     public List<Rooms> findAll() {
         List<Rooms> rooms = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -89,7 +100,10 @@ public class RoomDAO {
         }
         return rooms;
     }
-    /** Повертає кімнату за її ідентифікатором. */
+
+    /**
+     * Повертає кімнату за її ідентифікатором.
+     */
     public Rooms findById(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_ID)) {
@@ -102,7 +116,10 @@ public class RoomDAO {
         }
         return null;
     }
-    /** Виконує фільтрацію кімнат за класом та статусом. */
+
+    /**
+     * Виконує фільтрацію кімнат за класом та статусом.
+     */
     public List<Rooms> findWithFilters(String roomClass, String status) {
         List<Rooms> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM rooms WHERE 1=1");
@@ -130,14 +147,17 @@ public class RoomDAO {
         }
         return list;
     }
-    /** Виконує пошук вільних номерів за заданими параметрами. */
+
+    /**
+     * Виконує пошук вільних номерів за заданими параметрами.
+     */
     public List<Rooms> findFreeRooms(LocalDate checkIn, LocalDate checkOut, String roomClass, double maxPrice) {
         List<Rooms> list = new ArrayList<>();
 
-        Date sqlCheckIn  = Date.valueOf(checkIn  != null ? checkIn  : LocalDate.now());
+        Date sqlCheckIn = Date.valueOf(checkIn != null ? checkIn : LocalDate.now());
         Date sqlCheckOut = Date.valueOf(checkOut != null ? checkOut : LocalDate.now().plusDays(1));
-        String cls       = (roomClass != null && !roomClass.trim().isEmpty()) ? roomClass : "Всі";
-        double price     = maxPrice > 0 ? maxPrice : 999999.0;
+        String cls = (roomClass != null && !roomClass.trim().isEmpty()) ? roomClass : "Всі";
+        double price = maxPrice > 0 ? maxPrice : 999999.0;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_FREE_ROOMS)) {
@@ -164,7 +184,10 @@ public class RoomDAO {
         }
         return list;
     }
-    /** Повертає список техніки, закріпленої за кімнатою. */
+
+    /**
+     * Повертає список техніки, закріпленої за кімнатою.
+     */
     public List<Appliances> getAllAppliance() {
         List<Appliances> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -176,7 +199,10 @@ public class RoomDAO {
         }
         return list;
     }
-    /** Повертає список техніки, закріпленої за кімнатою. */
+
+    /**
+     * Повертає список техніки, закріпленої за кімнатою.
+     */
     public List<Appliances> getAppliancesForRoom(int roomId) {
         List<Appliances> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -190,7 +216,10 @@ public class RoomDAO {
         }
         return list;
     }
-    /** Додає техніку до вибраної кімнати. */
+
+    /**
+     * Додає техніку до вибраної кімнати.
+     */
     public void addApplianceToRoom(int roomId, int applianceId) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_APPLIANCE_TO_ROOM)) {
@@ -201,7 +230,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка при додаванні техніки до кімнати", e);
         }
     }
-    /** Видаляє техніку з вибраної кімнати. */
+
+    /**
+     * Видаляє техніку з вибраної кімнати.
+     */
     public void removeApplianceFromRoom(int roomId, int applianceId) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_APPLIANCE_FROM_ROOM)) {
@@ -212,7 +244,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка при видаленні техніки з кімнати", e);
         }
     }
-    /** Оновлює статус кімнати за її ідентифікатором. */
+
+    /**
+     * Оновлює статус кімнати за її ідентифікатором.
+     */
     public void updateRoomStatusById(int roomId, String newStatus) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_STATUS_BY_ID)) {
@@ -223,7 +258,10 @@ public class RoomDAO {
             throw new RuntimeException("Помилка оновлення статусу кімнати", e);
         }
     }
-    /** Заповнює PreparedStatement параметрами кімнати. */
+
+    /**
+     * Заповнює PreparedStatement параметрами кімнати.
+     */
     private void bindRoomFields(PreparedStatement stmt, Rooms room) throws SQLException {
         stmt.setString(1, room.getRoomNumber());
         stmt.setInt(2, room.getFloor());
@@ -232,7 +270,10 @@ public class RoomDAO {
         stmt.setInt(5, room.getCapacity());
         stmt.setString(6, room.getStatus());
     }
-    /** Перетворює рядок ResultSet у об'єкт кімнати. */
+
+    /**
+     * Перетворює рядок ResultSet у об'єкт кімнати.
+     */
     private Rooms mapRow(ResultSet rs) throws SQLException {
         Rooms room = new Rooms();
         room.setIdRoom(rs.getInt("id_room"));
@@ -244,7 +285,10 @@ public class RoomDAO {
         room.setStatus(rs.getString("status"));
         return room;
     }
-    /** Перетворює рядок ResultSet у об'єкт техніки. */
+
+    /**
+     * Перетворює рядок ResultSet у об'єкт техніки.
+     */
     private Appliances mapAppliance(ResultSet rs) throws SQLException {
         return new Appliances(
                 rs.getInt("id_appliance"),

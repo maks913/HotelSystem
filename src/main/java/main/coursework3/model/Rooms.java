@@ -10,24 +10,24 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 public class Rooms {
-  private int idRoom;
-  private String roomNumber;
-  private int floor;
-  private String roomClass;
-  private double costPerDay;
-  private int capacity;
-  private String status;
+    private int idRoom;
+    private String roomNumber;
+    private int floor;
+    private String roomClass;
+    private double costPerDay;
+    private int capacity;
+    private String status;
 
-  public Rooms() {
+    public Rooms() {
 
-  }
+    }
 
-  public Rooms(int idRoom, String roomNumber, int floor, String status, double price, int capacity) {
-  }
+    public Rooms(int idRoom, String roomNumber, int floor, String status, double price, int capacity) {
+    }
 
-  @Override
-  public String toString() {
-    return "Кімната: "  + roomNumber +
-            " Класс: " + roomClass;
-  }
+    @Override
+    public String toString() {
+        return "Кімната: " + roomNumber +
+                " Класс: " + roomClass;
+    }
 }

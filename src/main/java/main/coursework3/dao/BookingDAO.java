@@ -25,7 +25,9 @@ public class BookingDAO {
                     "FROM bookings WHERE MONTH(date_of_arrival) = ? AND YEAR(date_of_arrival) = ? " +
                     "AND status_armor IN ('Підтверджено', 'Очікує оплати', 'Активна')";
 
-    /** Отримує список усіх бронювань із бази даних. */
+    /**
+     * Отримує список усіх бронювань із бази даних.
+     */
     public List<Bookings> findAll() {
         List<Bookings> bookings = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -41,7 +43,9 @@ public class BookingDAO {
         return bookings;
     }
 
-    /** Оновлює статус вибраного бронювання. */
+    /**
+     * Оновлює статус вибраного бронювання.
+     */
     public void updateStatus(int bookingId, String newStatus) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_STATUS)) {
@@ -54,7 +58,9 @@ public class BookingDAO {
         }
     }
 
-    /** Додає нове бронювання до бази даних. */
+    /**
+     * Додає нове бронювання до бази даних.
+     */
     public void insertBooking(Bookings booking) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_BOOKING)) {
@@ -71,7 +77,9 @@ public class BookingDAO {
         }
     }
 
-    /** Оновлює параметри існуючого бронювання. */
+    /**
+     * Оновлює параметри існуючого бронювання.
+     */
     public void updateBooking(Bookings booking) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_BOOKING_FULL)) {
@@ -90,7 +98,9 @@ public class BookingDAO {
         }
     }
 
-    /** Повертає ПІБ клієнта за його ідентифікатором. */
+    /**
+     * Повертає ПІБ клієнта за його ідентифікатором.
+     */
     public String getClientNameById(int idClient) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_CLIENT_NAME)) {
@@ -105,7 +115,9 @@ public class BookingDAO {
         return "Невідомий клієнт";
     }
 
-    /** Повертає номер кімнати за її ідентифікатором. */
+    /**
+     * Повертає номер кімнати за її ідентифікатором.
+     */
     public String getRoomNumberById(int idRoom) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_ROOM_NUMBER)) {
@@ -120,7 +132,9 @@ public class BookingDAO {
         return "Невідома кімната";
     }
 
-    /** Автоматично закриває завершені за датою бронювання. */
+    /**
+     * Автоматично закриває завершені за датою бронювання.
+     */
     public void updateBookingStatusesSimple() {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_BOOKINGS_AUTO)) {
@@ -132,7 +146,9 @@ public class BookingDAO {
         }
     }
 
-    /** Формує фінансову статистику бронювань за обраний період. */
+    /**
+     * Формує фінансову статистику бронювань за обраний період.
+     */
     public double[] getBookingFinancials(int month, int year) {
         double[] result = new double[4];
 
@@ -155,7 +171,9 @@ public class BookingDAO {
         return result;
     }
 
-    /** Перетворює рядок ResultSet у об'єкт бронювання. */
+    /**
+     * Перетворює рядок ResultSet у об'єкт бронювання.
+     */
     private Bookings mapRow(ResultSet rs) throws SQLException {
         Bookings booking = new Bookings();
         booking.setIdBooking(rs.getInt("id_booking"));

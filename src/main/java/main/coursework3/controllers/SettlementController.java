@@ -19,6 +19,7 @@ import main.coursework3.controllers.modals.CheckOutController;
 import main.coursework3.io.Alerts;
 import main.coursework3.model.Settlements;
 import main.coursework3.services.SettlementService;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -27,18 +28,29 @@ import java.util.ResourceBundle;
 
 public class SettlementController implements Initializable {
 
-    @FXML private TextField txtSearchClient;
-    @FXML private CheckBox checkShowCompleted;
-    @FXML private Button btnCheckOut;
-    @FXML private Button btnEditSettlement;
+    @FXML
+    private TextField txtSearchClient;
+    @FXML
+    private CheckBox checkShowCompleted;
+    @FXML
+    private Button btnCheckOut;
+    @FXML
+    private Button btnEditSettlement;
 
-    @FXML private TableView<Settlements> settlementsTable;
-    @FXML private TableColumn<Settlements, String> colClient;
-    @FXML private TableColumn<Settlements, String> colRoom;
-    @FXML private TableColumn<Settlements, String> colArrival;
-    @FXML private TableColumn<Settlements, String> colLeaving;
-    @FXML private TableColumn<Settlements, Integer> colNights;
-    @FXML private TableColumn<Settlements, String> colPaymentStatus;
+    @FXML
+    private TableView<Settlements> settlementsTable;
+    @FXML
+    private TableColumn<Settlements, String> colClient;
+    @FXML
+    private TableColumn<Settlements, String> colRoom;
+    @FXML
+    private TableColumn<Settlements, String> colArrival;
+    @FXML
+    private TableColumn<Settlements, String> colLeaving;
+    @FXML
+    private TableColumn<Settlements, Integer> colNights;
+    @FXML
+    private TableColumn<Settlements, String> colPaymentStatus;
 
     private final Alerts alerts = new Alerts();
     private final SettlementService settlementService = new SettlementService();
@@ -46,7 +58,9 @@ public class SettlementController implements Initializable {
     private final ObservableList<Settlements> masterData = FXCollections.observableArrayList();
     private FilteredList<Settlements> filteredData;
 
-    /** Ініціалізує таблицю заселень, фільтри та обробники подій. */
+    /**
+     * Ініціалізує таблицю заселень, фільтри та обробники подій.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTableColumns();
@@ -56,7 +70,10 @@ public class SettlementController implements Initializable {
 
         loadData();
     }
-    /** Завантажує список заселень із бази даних у таблицю. */
+
+    /**
+     * Завантажує список заселень із бази даних у таблицю.
+     */
     private void loadData() {
         try {
             masterData.setAll(settlementService.getAllSettlements());
@@ -64,7 +81,10 @@ public class SettlementController implements Initializable {
             alerts.showError("Помилка завантаження", "Не вдалося отримати дані з бази даних:\n" + e.getMessage());
         }
     }
-    /** Прив'язує стовпці таблиці до властивостей моделі заселення. */
+
+    /**
+     * Прив'язує стовпці таблиці до властивостей моделі заселення.
+     */
     private void setupTableColumns() {
         colClient.setCellValueFactory(cellData -> {
             String clientName = settlementService.getClientName(cellData.getValue().getIdClient());
@@ -101,7 +121,10 @@ public class SettlementController implements Initializable {
                 new SimpleStringProperty(cellData.getValue().getPaymentStatus())
         );
     }
-    /** Ініціалізує пошук та фільтрацію списку заселень. */
+
+    /**
+     * Ініціалізує пошук та фільтрацію списку заселень.
+     */
     private void setupFilters() {
         filteredData = new FilteredList<>(masterData, s -> true);
         SortedList<Settlements> sortedData = new SortedList<>(filteredData);
@@ -111,27 +134,10 @@ public class SettlementController implements Initializable {
         Runnable updatePredicate = () -> {
             String searchText = (txtSearchClient != null ? txtSearchClient.getText().trim().toLowerCase() : "");
             boolean showCompleted = (checkShowCompleted != null && checkShowCompleted.isSelected());
-            LocalDate today = LocalDate.now();
 
-            filteredData.setPredicate(settlement -> {
-                Date leavingDate = settlement.getFactOfLeaving();
-                if (leavingDate != null) {
-                    LocalDate lDate = leavingDate.toLocalDate();
-                    if (!showCompleted && (lDate.isBefore(today) || lDate.isEqual(today))) {
-                        if ("Оплачено".equalsIgnoreCase(settlement.getPaymentStatus())) {
-                            return false;
-                        }
-                    }
-                }
-
-                if (!searchText.isEmpty()) {
-                    String clientName = settlementService.getClientName(settlement.getIdClient()).toLowerCase();
-                    if (!clientName.contains(searchText)) {
-                        return false;
-                    }
-                }
-                return true;
-            });
+            filteredData.setPredicate(settlement ->
+                    settlementService.matchesFilter(settlement, searchText, showCompleted)
+            );
         };
 
         txtSearchClient.textProperty().addListener((obs, oldVal, newVal) -> updatePredicate.run());
@@ -141,12 +147,18 @@ public class SettlementController implements Initializable {
         }
         updatePredicate.run();
     }
-    /** Реєструє обробники подій для кнопок керування заселеннями. */
+
+    /**
+     * Реєструє обробники подій для кнопок керування заселеннями.
+     */
     private void setupButtonActions() {
         btnCheckOut.setOnAction(event -> handleCheckOut());
         btnEditSettlement.setOnAction(event -> handleEditSettlement());
     }
-    /** Відкриває форму редагування параметрів проживання. */
+
+    /**
+     * Відкриває форму редагування параметрів проживання.
+     */
     private void handleEditSettlement() {
         Settlements selected = settlementsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -176,7 +188,10 @@ public class SettlementController implements Initializable {
             alerts.showError("Помилка відкриття вікна", "Не вдалося завантажити форму редагування:\n" + e.getMessage());
         }
     }
-    /** Виконує оформлення виселення та фінального розрахунку. */
+
+    /**
+     * Виконує оформлення виселення та фінального розрахунку.
+     */
     private void handleCheckOut() {
         Settlements selectedSettlement = settlementsTable.getSelectionModel().getSelectedItem();
         if (selectedSettlement == null) {
@@ -203,7 +218,10 @@ public class SettlementController implements Initializable {
             alerts.showError("Помилка відкриття вікна", "Не вдалося завантажити форму розрахунку:\n" + e.getMessage());
         }
     }
-    /** Відкриває модальне вікно з переданим інтерфейсом. */
+
+    /**
+     * Відкриває модальне вікно з переданим інтерфейсом.
+     */
     private void openModalWindow(String title, Parent root, Button ownerButton) {
         Stage stage = new Stage();
         stage.setTitle(title);

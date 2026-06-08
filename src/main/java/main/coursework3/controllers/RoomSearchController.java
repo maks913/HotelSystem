@@ -27,28 +27,45 @@ import java.util.ResourceBundle;
 
 public class RoomSearchController implements Initializable {
 
-    @FXML private DatePicker dpDateFrom;
-    @FXML private DatePicker dpDateTo;
-    @FXML private ComboBox<String> cmbRoomClass;
-    @FXML private TextField txtMaxPrice;
-    @FXML private Button handleSearch;
-    @FXML private Button btnClear;
-    @FXML private Button btnCreateBooking;
-    @FXML private Button btnCheckIn;
+    @FXML
+    private DatePicker dpDateFrom;
+    @FXML
+    private DatePicker dpDateTo;
+    @FXML
+    private ComboBox<String> cmbRoomClass;
+    @FXML
+    private TextField txtMaxPrice;
+    @FXML
+    private Button handleSearch;
+    @FXML
+    private Button btnClear;
+    @FXML
+    private Button btnCreateBooking;
+    @FXML
+    private Button btnCheckIn;
 
-    @FXML private TableView<Rooms> roomsTable;
-    @FXML private TableColumn<Rooms, String> colRoomNumber;
-    @FXML private TableColumn<Rooms, Integer> colFloor;
-    @FXML private TableColumn<Rooms, String> colClass;
-    @FXML private TableColumn<Rooms, Integer> colCapacity;
-    @FXML private TableColumn<Rooms, Double> colPrice;
-    @FXML private TableColumn<Rooms, String> colStatus;
+    @FXML
+    private TableView<Rooms> roomsTable;
+    @FXML
+    private TableColumn<Rooms, String> colRoomNumber;
+    @FXML
+    private TableColumn<Rooms, Integer> colFloor;
+    @FXML
+    private TableColumn<Rooms, String> colClass;
+    @FXML
+    private TableColumn<Rooms, Integer> colCapacity;
+    @FXML
+    private TableColumn<Rooms, Double> colPrice;
+    @FXML
+    private TableColumn<Rooms, String> colStatus;
 
     private final RoomSearchService searchService = new RoomSearchService();
     private final Alerts alerts = new Alerts();
     private final ObservableList<Rooms> observableRoomsList = FXCollections.observableArrayList();
 
-    /** Ініціалізує таблицю, фільтри та обробники подій пошуку номерів. */
+    /**
+     * Ініціалізує таблицю, фільтри та обробники подій пошуку номерів.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTable();
@@ -62,7 +79,10 @@ public class RoomSearchController implements Initializable {
 
         performSearch();
     }
-    /** Прив'язує стовпці таблиці до властивостей моделі кімнати. */
+
+    /**
+     * Прив'язує стовпці таблиці до властивостей моделі кімнати.
+     */
     private void setupTable() {
         colRoomNumber.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRoomNumber()));
         colFloor.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getFloor()).asObject());
@@ -72,9 +92,12 @@ public class RoomSearchController implements Initializable {
         colStatus.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
         roomsTable.setItems(observableRoomsList);
     }
-    /** Ініціалізує фільтри пошуку та перевірку введення ціни. */
+
+    /**
+     * Ініціалізує фільтри пошуку та перевірку введення ціни.
+     */
     private void setupFilters() {
-        cmbRoomClass.setItems(FXCollections.observableArrayList("Всі","Економ", "Стандарт", "Напів-Люкс","Люкс"));
+        cmbRoomClass.setItems(FXCollections.observableArrayList("Всі", "Економ", "Стандарт", "Напів-Люкс", "Люкс"));
         cmbRoomClass.setValue("Всі");
 
         txtMaxPrice.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -83,46 +106,49 @@ public class RoomSearchController implements Initializable {
             }
         });
     }
-    /** Встановлює стандартні дати пошуку номерів. */
+
+    /**
+     * Встановлює стандартні дати пошуку номерів.
+     */
     private void setDefaultDates() {
         if (dpDateFrom != null && dpDateFrom.getValue() == null) dpDateFrom.setValue(LocalDate.now());
         if (dpDateTo != null && dpDateTo.getValue() == null) dpDateTo.setValue(LocalDate.now().plusDays(1));
     }
-    /** Виконує пошук вільних номерів за заданими параметрами. */
+
+    /**
+     * Виконує пошук вільних номерів за заданими параметрами.
+     */
     private void performSearch() {
         LocalDate dateFrom = dpDateFrom.getValue();
         LocalDate dateTo = dpDateTo.getValue();
-        String roomClass = cmbRoomClass.getValue();
-        String maxPriceText = txtMaxPrice.getText();
 
-        if (dateFrom == null || dateTo == null) {
-            alerts.showError("Помилка вводу", "Будь ласка, вкажіть обидві дати!");
-            return;
-        }
-        if (dateFrom.isAfter(dateTo)) {
-            alerts.showError("Помилка дат", "Дата виїзду не може бути раніше дати заїзду!");
-            return;
-        }
-        if (dateFrom.isBefore(LocalDate.now())) {
-            alerts.showError("Помилка дат", "Неможливо знайти номери на минулі дати!");
+        RoomSearchService.DateValidationResult validation = searchService.validateSearchDates(dateFrom, dateTo);
+        if (!validation.valid) {
+            alerts.showError(validation.errorTitle, validation.errorMessage);
             return;
         }
 
         try {
-            List<Rooms> freeRooms = searchService.searchFreeRooms(dateFrom, dateTo, roomClass, maxPriceText);
+            List<Rooms> freeRooms = searchService.searchFreeRooms(dateFrom, dateTo, cmbRoomClass.getValue(), txtMaxPrice.getText());
             observableRoomsList.setAll(freeRooms);
         } catch (Exception e) {
             alerts.showError("Помилка СУБД", "Не вдалося отримати список номерів:\n" + e.getMessage());
         }
     }
-    /** Очищує параметри пошуку та оновлює список номерів. */
+
+    /**
+     * Очищує параметри пошуку та оновлює список номерів.
+     */
     private void clearFilters() {
         txtMaxPrice.clear();
         cmbRoomClass.setValue("Всі");
         setDefaultDates();
         performSearch();
     }
-    /** Відкриває форму створення нового бронювання для вибраного номера. */
+
+    /**
+     * Відкриває форму створення нового бронювання для вибраного номера.
+     */
     private void handleBookingAction() {
         Rooms selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
         LocalDate dateFrom = dpDateFrom.getValue();
@@ -146,19 +172,24 @@ public class RoomSearchController implements Initializable {
             alerts.showError("Помилка", "Не вдалося відкрити вікно бронювання:\n" + e.getMessage());
         }
     }
-    /** Відкриває форму прямого поселення гостя у вибраний номер. */
+
+    /**
+     * Відкриває форму прямого поселення гостя у вибраний номер.
+     */
     private void handleCheckInAction() {
         Rooms selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
-        LocalDate dateFrom = dpDateFrom.getValue();
         LocalDate dateTo = dpDateTo.getValue();
 
         if (selectedRoom == null || dateTo == null) {
             alerts.showError("Помилка", "Оберіть номер та вкажіть дату виїзду!");
             return;
         }
-        if (dateFrom == null) dateFrom = LocalDate.now();
-        if (dateFrom.isAfter(LocalDate.now())) {
-            alerts.showError("Помилка", "Пряме поселення можливе лише на сьогодні!");
+
+        LocalDate dateFrom = (dpDateFrom.getValue() != null) ? dpDateFrom.getValue() : LocalDate.now();
+
+        RoomSearchService.DateValidationResult validation = searchService.validateCheckInDate(dateFrom);
+        if (!validation.valid) {
+            alerts.showError(validation.errorTitle, validation.errorMessage);
             return;
         }
 
@@ -175,7 +206,10 @@ public class RoomSearchController implements Initializable {
             alerts.showError("Помилка", "Не вдалося відкрити вікно поселения:\n" + e.getMessage());
         }
     }
-    /** Відкриває модальне вікно з переданим інтерфейсом. */
+
+    /**
+     * Відкриває модальне вікно з переданим інтерфейсом.
+     */
     private void openModalStage(String title, Parent root) {
         Stage modalStage = new Stage();
         modalStage.setTitle(title);

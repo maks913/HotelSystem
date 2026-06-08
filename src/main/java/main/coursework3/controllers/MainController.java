@@ -15,20 +15,30 @@ import java.io.IOException;
 
 public class MainController {
 
-    @FXML private Button btnRooms;
-    @FXML private Button btnClients;
-    @FXML private Button btnBookings;
-    @FXML private Button btnChess;
-    @FXML private Button btnLogout;
-    @FXML private Button btnSettlements;
-    @FXML private Button btnFreeNumber;
-    @FXML private AnchorPane contentArea;
+    @FXML
+    private Button btnRooms;
+    @FXML
+    private Button btnClients;
+    @FXML
+    private Button btnBookings;
+    @FXML
+    private Button btnChess;
+    @FXML
+    private Button btnLogout;
+    @FXML
+    private Button btnSettlements;
+    @FXML
+    private Button btnFreeNumber;
+    @FXML
+    private AnchorPane contentArea;
 
     private final BookingDAO bookingDAO = new BookingDAO();
     private final SettlementService settlementService = new SettlementService();
     private final Alerts alerts = new Alerts();
 
-    /** Ініціалізує головне меню та налаштовує навігацію між модулями. */
+    /**
+     * Ініціалізує головне меню та налаштовує навігацію між модулями.
+     */
     @FXML
     public void initialize() {
         try {
@@ -49,7 +59,9 @@ public class MainController {
 
     }
 
-    /** Завантажує та відображає вибране представлення у центральній області вікна. */
+    /**
+     * Завантажує та відображає вибране представлення у центральній області вікна.
+     */
     private void loadView(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));

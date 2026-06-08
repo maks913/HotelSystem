@@ -46,6 +46,7 @@
     -fx-control-inner-background: #ffffff;
     -fx-table-cell-border-color: #bdc3c7;
 }
+
 .table-view .column-header {
     -fx-background-color: #34495e;
 }
@@ -75,16 +76,28 @@
     -fx-font-weight: bold;
 }
 
-.status-free { -fx-background-color: #2ecc71; }
-.status-occupied { -fx-background-color: #e74c3c; }
-.status-booked { -fx-background-color: #f1c40f; }
-.status-repair { -fx-background-color: #95a5a6; }
+.status-free {
+    -fx-background-color: #2ecc71;
+}
+
+.status-occupied {
+    -fx-background-color: #e74c3c;
+}
+
+.status-booked {
+    -fx-background-color: #f1c40f;
+}
+
+.status-repair {
+    -fx-background-color: #95a5a6;
+}
 
 .btn-cancel {
     -fx-background-color: #bdc3c7;
     -fx-text-fill: white;
     -fx-background-radius: 3;
 }
+
 .btn-cancel:hover {
     -fx-background-color: #95a5a6;
 }
@@ -94,6 +107,7 @@
     -fx-text-fill: white;
     -fx-background-radius: 3;
 }
+
 .btn-success:hover {
     -fx-background-color: #27ae60;
 }
@@ -103,6 +117,7 @@
     -fx-text-fill: white;
     -fx-background-radius: 3;
 }
+
 .btn-warning:hover {
     -fx-background-color: #d35400;
 }

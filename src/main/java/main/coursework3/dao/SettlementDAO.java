@@ -32,9 +32,12 @@ public class SettlementDAO {
             "GROUP BY r.room_class " +
             "ORDER BY rents DESC LIMIT 1";
 
-    private static final String UPDATE_AUTO_PAYMENT_STATUS = "UPDATE settlements SET payment_status = ? WHERE id_settlement = ?";;
+    private static final String UPDATE_AUTO_PAYMENT_STATUS = "UPDATE settlements SET payment_status = ? WHERE id_settlement = ?";
+    ;
 
-    /** Отримує список усіх заселень із бази даних. */
+    /**
+     * Отримує список усіх заселень із бази даних.
+     */
     public List<Settlements> findAll() {
         List<Settlements> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -50,7 +53,9 @@ public class SettlementDAO {
         return list;
     }
 
-    /** Додає новий запис про заселення до бази даних. */
+    /**
+     * Додає новий запис про заселення до бази даних.
+     */
     public boolean insertSettlement(Settlements settlement) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SETTLEMENT)) {
@@ -67,7 +72,10 @@ public class SettlementDAO {
             throw new RuntimeException("Помилка при створенні заселення", e);
         }
     }
-    /** Оновлює статус оплати для вибраного заселення. */
+
+    /**
+     * Оновлює статус оплати для вибраного заселення.
+     */
     public void updatePaymentStatusById(int settlementId, String status) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_AUTO_PAYMENT_STATUS)) {
@@ -80,7 +88,10 @@ public class SettlementDAO {
             e.printStackTrace();
         }
     }
-    /** Фіксує виселення гостя та оновлює фінальні дані оплати. */
+
+    /**
+     * Фіксує виселення гостя та оновлює фінальні дані оплати.
+     */
     public boolean updateCheckoutDetails(int idSettlement, double finalCost, String paymentStatus) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_CHECKOUT)) {
@@ -94,7 +105,10 @@ public class SettlementDAO {
             throw new RuntimeException("Помилка при фіксації виселення та оплати в БД", e);
         }
     }
-    /** Повертає ПІБ клієнта за його ідентифікатором. */
+
+    /**
+     * Повертає ПІБ клієнта за його ідентифікатором.
+     */
     public String getClientNameById(int idClient) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_CLIENT_NAME)) {
@@ -108,7 +122,10 @@ public class SettlementDAO {
         }
         return "Невідомий клієнт";
     }
-    /** Повертає номер кімнати за її ідентифікатором. */
+
+    /**
+     * Повертає номер кімнати за її ідентифікатором.
+     */
     public String getRoomNumberById(int idRoom) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_ROOM_NUMBER)) {
@@ -122,7 +139,10 @@ public class SettlementDAO {
         }
         return "Невідома кімната";
     }
-    /** Оновлює всі параметри вибраного заселення. */
+
+    /**
+     * Оновлює всі параметри вибраного заселення.
+     */
     public boolean updateSettlementFull(Settlements settlement) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_SETTLEMENT_FULL)) {
@@ -140,7 +160,10 @@ public class SettlementDAO {
             throw new RuntimeException("Помилка при повній зміні параметрів заселення", e);
         }
     }
-    /** Формує фінансову статистику заселень за обраний період. */
+
+    /**
+     * Формує фінансову статистику заселень за обраний період.
+     */
     public double[] getSettlementFinancials(int month, int year) {
         double[] result = new double[3];
 
@@ -162,7 +185,10 @@ public class SettlementDAO {
         }
         return result;
     }
-    /** Формує операційну статистику роботи готелю за місяць. */
+
+    /**
+     * Формує операційну статистику роботи готелю за місяць.
+     */
     public Object[] getOperationalStats(int month, int year) {
         Object[] stats = new Object[]{0, 0, "Немає даних"};
 
@@ -215,14 +241,20 @@ public class SettlementDAO {
         }
         return stats;
     }
-    /** Обчислює кількість ночей проживання в межах заданого періоду. */
+
+    /**
+     * Обчислює кількість ночей проживання в межах заданого періоду.
+     */
     private int calculateNights(LocalDate arrival, LocalDate leaving, LocalDate periodStart, LocalDate periodEnd) {
         LocalDate start = arrival.isAfter(periodStart) ? arrival : periodStart;
         LocalDate end = leaving.isBefore(periodEnd) ? leaving : periodEnd;
         int nights = (int) ChronoUnit.DAYS.between(start, end);
         return Math.max(nights, 1);
     }
-    /** Перетворює рядок ResultSet у об'єкт заселення. */
+
+    /**
+     * Перетворює рядок ResultSet у об'єкт заселення.
+     */
     private Settlements mapRow(ResultSet rs) throws SQLException {
         return new Settlements(
                 rs.getInt("id_settlement"),

@@ -2,6 +2,7 @@ package main.coursework3.dao;
 
 import main.coursework3.io.DatabaseConnection;
 import main.coursework3.model.Clients;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,10 @@ public class ClientDAO {
     private static final String SELECT_ALL = "SELECT * FROM clients";
     private static final String SELECT_BY_ID = "SELECT * FROM clients WHERE id_client = ?";
     private static final String SELECT_BY_PIB = "SELECT * FROM clients WHERE LOWER(pib) LIKE ? OR phone_number LIKE ?";
-    /** Додає нового клієнта до бази даних. */
+
+    /**
+     * Додає нового клієнта до бази даних.
+     */
     public void insertClient(Clients client) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_CLIENT)) {
@@ -25,7 +29,10 @@ public class ClientDAO {
             throw new RuntimeException("Помилка при додаванні клієнта", e);
         }
     }
-    /** Оновлює дані існуючого клієнта. */
+
+    /**
+     * Оновлює дані існуючого клієнта.
+     */
     public void updateClient(Clients client) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_CLIENT)) {
@@ -37,7 +44,10 @@ public class ClientDAO {
             throw new RuntimeException("Помилка при оновленні клієнта", e);
         }
     }
-    /** Видаляє клієнта з бази даних за ідентифікатором. */
+
+    /**
+     * Видаляє клієнта з бази даних за ідентифікатором.
+     */
     public void deleteClient(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_CLIENT)) {
@@ -48,7 +58,10 @@ public class ClientDAO {
             throw new RuntimeException("Помилка при видаленні клієнта", e);
         }
     }
-    /** Отримує список усіх клієнтів готелю. */
+
+    /**
+     * Отримує список усіх клієнтів готелю.
+     */
     public List<Clients> findAll() {
         List<Clients> clients = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
@@ -63,7 +76,10 @@ public class ClientDAO {
         }
         return clients;
     }
-    /** Виконує пошук клієнтів за ПІБ або номером телефону. */
+
+    /**
+     * Виконує пошук клієнтів за ПІБ або номером телефону.
+     */
     public List<Clients> findBySearchFilter(String filterText) {
         List<Clients> result = new ArrayList<>();
         String queryParam = "%" + filterText.trim().toLowerCase() + "%";
@@ -84,7 +100,10 @@ public class ClientDAO {
         }
         return result;
     }
-    /** Повертає клієнта за його ідентифікатором. */
+
+    /**
+     * Повертає клієнта за його ідентифікатором.
+     */
     public Clients findById(int id) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_ID)) {
@@ -98,7 +117,10 @@ public class ClientDAO {
         }
         return null;
     }
-    /** Заповнює PreparedStatement даними клієнта. */
+
+    /**
+     * Заповнює PreparedStatement даними клієнта.
+     */
     private void bindClientFields(PreparedStatement stmt, Clients client) throws SQLException {
         stmt.setString(1, client.getPib());
         stmt.setString(2, client.getPasportSeria());
@@ -111,7 +133,10 @@ public class ClientDAO {
             stmt.setNull(5, Types.DATE);
         }
     }
-    /** Перетворює рядок ResultSet у об'єкт клієнта. */
+
+    /**
+     * Перетворює рядок ResultSet у об'єкт клієнта.
+     */
     private Clients mapRow(ResultSet rs) throws SQLException {
         Clients client = new Clients();
         client.setIdClient(rs.getInt("id_client"));

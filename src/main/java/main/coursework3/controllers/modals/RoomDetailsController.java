@@ -16,18 +16,26 @@ import java.util.List;
 import java.util.Optional;
 
 public class RoomDetailsController {
-    @FXML private TextField txtRoomNumber, txtFloor, txtCost, txtCapacity;
-    @FXML private ComboBox<String> comboClass, comboStatus;
-    @FXML private TableView<Appliances> appliancesTable;
-    @FXML private TableColumn<Appliances, String> colAppName, colAppCondition;
-    @FXML private Button btnSave, btnCancel, btnAddAppliance, btnRemoveAppliance;
+    @FXML
+    private TextField txtRoomNumber, txtFloor, txtCost, txtCapacity;
+    @FXML
+    private ComboBox<String> comboClass, comboStatus;
+    @FXML
+    private TableView<Appliances> appliancesTable;
+    @FXML
+    private TableColumn<Appliances, String> colAppName, colAppCondition;
+    @FXML
+    private Button btnSave, btnCancel, btnAddAppliance, btnRemoveAppliance;
 
     private final RoomDAO roomDAO = new RoomDAO();
     private final Alerts alerts = new Alerts();
     private Rooms currentRoom;
 
     private final ObservableList<Appliances> localAppliancesList = FXCollections.observableArrayList();
-    /** Ініціалізація форми редагування кімнати та налаштування таблиці техніки. */
+
+    /**
+     * Ініціалізація форми редагування кімнати та налаштування таблиці техніки.
+     */
     @FXML
     public void initialize() {
         colAppName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -43,7 +51,10 @@ public class RoomDetailsController {
         btnAddAppliance.setOnAction(e -> handleAddAppliance());
         btnRemoveAppliance.setOnAction(e -> handleRemoveAppliance());
     }
-    /** Заповнення форми даними вибраної кімнати. */
+
+    /**
+     * Заповнення форми даними вибраної кімнати.
+     */
     public void setRoomData(Rooms room) {
         this.currentRoom = room;
 
@@ -63,7 +74,10 @@ public class RoomDetailsController {
             txtCapacity.setText("2");
         }
     }
-    /** Перевірка та збереження даних кімнати і техніки. */
+
+    /**
+     * Перевірка та збереження даних кімнати і техніки.
+     */
     @FXML
     private void handleSave() {
         if (!isInputValid()) return;
@@ -112,12 +126,18 @@ public class RoomDetailsController {
             alerts.showError("Помилка БД", "Не вдалося зберегти параметри кімнати:\n" + e.getMessage());
         }
     }
-    /** Скасування редагування та закриття вікна. */
+
+    /**
+     * Скасування редагування та закриття вікна.
+     */
     @FXML
     private void handleCancel() {
         closeStage();
     }
-    /** Додавання нового приладу до комплектації кімнати. */
+
+    /**
+     * Додавання нового приладу до комплектації кімнати.
+     */
     @FXML
     private void handleAddAppliance() {
         try {
@@ -147,7 +167,10 @@ public class RoomDetailsController {
             alerts.showError("Системна помилка", "Помилка роботи з діалогом технік.");
         }
     }
-    /** Видалення вибраного приладу зі списку кімнати. */
+
+    /**
+     * Видалення вибраного приладу зі списку кімнати.
+     */
     @FXML
     private void handleRemoveAppliance() {
         Appliances selected = appliancesTable.getSelectionModel().getSelectedItem();
@@ -158,7 +181,10 @@ public class RoomDetailsController {
 
         localAppliancesList.remove(selected);
     }
-    /** Перевірка коректності введених даних форми. */
+
+    /**
+     * Перевірка коректності введених даних форми.
+     */
     private boolean isInputValid() {
         if (txtRoomNumber.getText() == null || txtRoomNumber.getText().trim().isEmpty() ||
                 txtCost.getText() == null || txtCost.getText().trim().isEmpty() ||
@@ -170,7 +196,10 @@ public class RoomDetailsController {
         }
         return true;
     }
-    /** Закриття поточного модального вікна. */
+
+    /**
+     * Закриття поточного модального вікна.
+     */
     private void closeStage() {
         if (btnCancel != null && btnCancel.getScene() != null) {
             Stage stage = (Stage) btnCancel.getScene().getWindow();

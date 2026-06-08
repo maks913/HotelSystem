@@ -8,24 +8,35 @@ import javafx.stage.Stage;
 import main.coursework3.dao.ClientDAO;
 import main.coursework3.io.Alerts;
 import main.coursework3.model.Clients;
+
 import java.sql.Date;
 import java.time.LocalDate;
 
 public class ClientDetailsController {
 
-    @FXML private TextField pibField;
-    @FXML private TextField passportSeriaField;
-    @FXML private TextField passportNumberField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker birthdayPicker;
+    @FXML
+    private TextField pibField;
+    @FXML
+    private TextField passportSeriaField;
+    @FXML
+    private TextField passportNumberField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker birthdayPicker;
 
-    @FXML private Button btnSave;
-    @FXML private Button btnCancel;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnCancel;
 
     private Clients currentClient;
     private final ClientDAO clientDAO = new ClientDAO();
     private final Alerts alerts = new Alerts();
-    /** Ініціалізація форми клієнта та налаштування обробників подій. */
+
+    /**
+     * Ініціалізація форми клієнта та налаштування обробників подій.
+     */
     @FXML
     public void initialize() {
         btnCancel.setOnAction(event -> closeWindow());
@@ -43,7 +54,10 @@ public class ClientDetailsController {
             }
         });
     }
-    /** Заповнення форми даними обраного клієнта. */
+
+    /**
+     * Заповнення форми даними обраного клієнта.
+     */
     public void setClientData(Clients client) {
         if (client == null) return;
 
@@ -57,7 +71,10 @@ public class ClientDetailsController {
             birthdayPicker.setValue(client.getDateOfBirth().toLocalDate());
         }
     }
-    /** Перевірка та збереження даних клієнта у базі даних. */
+
+    /**
+     * Перевірка та збереження даних клієнта у базі даних.
+     */
     private void handleSave() {
         String pib = pibField.getText().trim();
         String phone = phoneField.getText().trim();
@@ -103,7 +120,10 @@ public class ClientDetailsController {
                     "Не вдалося зберегти анкету клієнта. Перевірте унікальність номера паспорта або телефону.\nДеталі: " + e.getMessage());
         }
     }
-    /** Закриття поточного модального вікна. */
+
+    /**
+     * Закриття поточного модального вікна.
+     */
     private void closeWindow() {
         if (btnCancel != null && btnCancel.getScene() != null) {
             Stage stage = (Stage) btnCancel.getScene().getWindow();

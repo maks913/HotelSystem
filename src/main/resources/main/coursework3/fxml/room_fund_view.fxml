@@ -35,7 +35,7 @@
             </HBox>
         </HBox>
 
-        <TableView fx:id="roomsTable"  prefHeight="450.0" prefWidth="870.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="roomsTable" prefHeight="450.0" prefWidth="870.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colRoomNumber" prefWidth="100.0" text="№ Кімнати"/>
                 <TableColumn fx:id="colFloor" prefWidth="70.0" text="Поверх"/>

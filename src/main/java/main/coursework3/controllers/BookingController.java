@@ -28,20 +28,33 @@ import java.sql.Date;
 import java.util.ResourceBundle;
 
 public class BookingController implements Initializable {
-    @FXML private CheckBox checkShowCancelled;
-    @FXML private Button btnEditBooking;
-    @FXML private Button btnConfirmBooking;
-    @FXML private Button btnCancelBooking;
+    @FXML
+    private CheckBox checkShowCancelled;
+    @FXML
+    private Button btnEditBooking;
+    @FXML
+    private Button btnConfirmBooking;
+    @FXML
+    private Button btnCancelBooking;
 
-    @FXML private TableView<Bookings> bookingsTable;
-    @FXML private TableColumn<Bookings, Integer> colBookingId;
-    @FXML private TableColumn<Bookings, String> colClientName;
-    @FXML private TableColumn<Bookings, String> colRoomNumber;
-    @FXML private TableColumn<Bookings, Date> colArrivalDate;
-    @FXML private TableColumn<Bookings, Date> colDepartureDate;
-    @FXML private TableColumn<Bookings, Double> colDepositAmount;
-    @FXML private TableColumn<Bookings, String> colStatusArmor;
-    @FXML private TextField txtSearchClient;
+    @FXML
+    private TableView<Bookings> bookingsTable;
+    @FXML
+    private TableColumn<Bookings, Integer> colBookingId;
+    @FXML
+    private TableColumn<Bookings, String> colClientName;
+    @FXML
+    private TableColumn<Bookings, String> colRoomNumber;
+    @FXML
+    private TableColumn<Bookings, Date> colArrivalDate;
+    @FXML
+    private TableColumn<Bookings, Date> colDepartureDate;
+    @FXML
+    private TableColumn<Bookings, Double> colDepositAmount;
+    @FXML
+    private TableColumn<Bookings, String> colStatusArmor;
+    @FXML
+    private TextField txtSearchClient;
 
     private final BookingService bookingService = new BookingService();
     private final Alerts alerts = new Alerts();
@@ -63,7 +76,9 @@ public class BookingController implements Initializable {
         loadData();
     }
 
-    /** Прив'язує стовпці таблиці до властивостей моделі бронювання. */
+    /**
+     * Прив'язує стовпці таблиці до властивостей моделі бронювання.
+     */
     private void setupTableColumns() {
         colBookingId.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBooking()).asObject());
         colArrivalDate.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateOfArrival()));
@@ -80,7 +95,9 @@ public class BookingController implements Initializable {
         );
     }
 
-    /** Ініціалізує пошук та фільтрацію списку бронювань. */
+    /**
+     * Ініціалізує пошук та фільтрацію списку бронювань.
+     */
     private void setupFilters() {
         filteredData = new FilteredList<>(masterData, b -> true);
         SortedList<Bookings> sortedData = new SortedList<>(filteredData);
@@ -91,17 +108,9 @@ public class BookingController implements Initializable {
             String searchText = (txtSearchClient != null ? txtSearchClient.getText().trim().toLowerCase() : "");
             boolean showCancelled = (checkShowCancelled != null && checkShowCancelled.isSelected());
 
-            filteredData.setPredicate(booking -> {
-                String status = booking.getStatusArmor();
-                if (!showCancelled && ("Скасовано".equalsIgnoreCase(status) || "Завершено".equalsIgnoreCase(status))) {
-                    return false;
-                }
-                if (!searchText.isEmpty()) {
-                    String clientName = bookingService.getClientName(booking.getIdClient()).toLowerCase();
-                    if (!clientName.contains(searchText)) return false;
-                }
-                return true;
-            });
+            filteredData.setPredicate(booking ->
+                    bookingService.matchesFilter(booking, searchText, showCancelled)
+            );
         };
 
         txtSearchClient.textProperty().addListener((obs, oldVal, newVal) -> updatePredicate.run());
@@ -112,14 +121,18 @@ public class BookingController implements Initializable {
         updatePredicate.run();
     }
 
-    /** Реєструє обробники подій для кнопок керування бронюваннями. */
+    /**
+     * Реєструє обробники подій для кнопок керування бронюваннями.
+     */
     private void setupActions() {
         btnCancelBooking.setOnAction(e -> handleCancelBooking());
         btnConfirmBooking.setOnAction(e -> handleCheckIn());
         btnEditBooking.setOnAction(e -> openEditBookingModal());
     }
 
-    /** Завантажує список бронювань із бази даних у таблицю. */
+    /**
+     * Завантажує список бронювань із бази даних у таблицю.
+     */
     private void loadData() {
         try {
             masterData.setAll(bookingService.getAllBookings());
@@ -128,7 +141,9 @@ public class BookingController implements Initializable {
         }
     }
 
-    /** Відкриває модальне вікно редагування вибраного бронювання. */
+    /**
+     * Відкриває модальне вікно редагування вибраного бронювання.
+     */
     private void openEditBookingModal() {
         Bookings selected = bookingsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -136,8 +151,7 @@ public class BookingController implements Initializable {
             return;
         }
 
-        String status = selected.getStatusArmor();
-        if ("Завершено".equalsIgnoreCase(status) || "Скасовано".equalsIgnoreCase(status)) {
+        if (bookingService.isBookingClosed(selected)) {
             alerts.showError("Операція заблокована", "Неможливо редагувати закрите або скасоване бронювання.");
             return;
         }
@@ -171,7 +185,9 @@ public class BookingController implements Initializable {
         }
     }
 
-    /** Скасовує вибране бронювання та оновлює статус кімнати. */
+    /**
+     * Скасовує вибране бронювання та оновлює статус кімнати.
+     */
     private void handleCancelBooking() {
         Bookings selected = bookingsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -179,16 +195,16 @@ public class BookingController implements Initializable {
             return;
         }
 
-        if ("Скасовано".equalsIgnoreCase(selected.getStatusArmor()) || "Завершено".equalsIgnoreCase(selected.getStatusArmor())) {
+        if (bookingService.isBookingClosed(selected)) {
             alerts.showError("Увага", "Це бронювання вже закрите або скасоване!");
             return;
         }
 
-        if (!alerts.showConfirmation("Скасування", "Скасувати бронювання №" + selected.getIdBooking() + "?", "Кімната звільниться.")) return;
+        if (!alerts.showConfirmation("Скасування", "Скасувати бронювання №" + selected.getIdBooking() + "?", "Кімната звільниться."))
+            return;
 
         try {
-            bookingService.updateStatus(selected.getIdBooking(), "Скасовано");
-            bookingService.runAutoUpdate();
+            bookingService.cancelBooking(selected.getIdBooking());
             alerts.showMessage("Успіх", "Бронювання успішно скасовано.");
             loadData();
         } catch (Exception e) {
@@ -196,7 +212,9 @@ public class BookingController implements Initializable {
         }
     }
 
-    /** Оформлює фактичне поселення гостя за вибраним бронюванням. */
+    /**
+     * Оформлює фактичне поселення гостя за вибраним бронюванням.
+     */
     private void handleCheckIn() {
         Bookings selected = bookingsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -204,31 +222,21 @@ public class BookingController implements Initializable {
             return;
         }
 
-        if ("Завершено".equalsIgnoreCase(selected.getStatusArmor())) {
+        if (bookingService.isBookingCompleted(selected)) {
             alerts.showError("Увага", "Цього гостя вже було успішно поселено!");
             return;
         }
 
-        if (!alerts.showConfirmation("Оформлення заїзду", "Оформити фактичний заїзд гостя №" + selected.getIdBooking() + "?", "Бронювання перейде в 'Завершено'.")) return;
+        if (!alerts.showConfirmation("Оформлення заїзду", "Оформити фактичний заїзд гостя №" + selected.getIdBooking() + "?", "Бронювання перейде в 'Завершено'."))
+            return;
 
         try {
-            Rooms room = bookingService.findRoomById(selected.getIdRoom());
-            if (room == null) {
-                alerts.showError("Помилка", "Кімнату не знайдено в базі даних.");
-                return;
-            }
-
-            double totalCost = bookingService.calculateTotalCost(
-                    selected.getDateOfArrival().toLocalDate(),
-                    selected.getDepartureDate().toLocalDate(),
-                    room.getCostPerDay()
-            );
-
-            if (bookingService.processCheckInTransaction(selected, totalCost)) {
+            BookingService.CheckInResult result = bookingService.performCheckIn(selected);
+            if (result.success) {
                 loadData();
-                alerts.showMessage("Успіх", String.format("Поселення успішно оформлено!\nЗагальна вартість: %.2f грн.", totalCost));
+                alerts.showMessage("Успіх", "Поселення успішно оформлено!\nЗагальна вартість: " + result.formatTotalCost());
             } else {
-                alerts.showError("Помилка БД", "Не вдалося зберегти дані про поселення.");
+                alerts.showError("Помилка", result.errorMessage);
             }
         } catch (Exception e) {
             alerts.showError("Критична помилка", "Не вдалося завершити Check-In:\n" + e.getMessage());

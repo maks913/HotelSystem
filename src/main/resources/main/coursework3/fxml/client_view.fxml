@@ -28,7 +28,7 @@
                 </font>
             </Label>
             <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
-                <TextField fx:id="searchField" prefWidth="200.0" promptText ="Пошук за ПІБ..."/>
+                <TextField fx:id="searchField" prefWidth="200.0" promptText="Пошук за ПІБ..."/>
                 <Button fx:id="btnAddClient" mnemonicParsing="false" styleClass="btn-action"
                         text="➕ Додати клієнта"/>
             </HBox>

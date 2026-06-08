@@ -12,28 +12,34 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import main.coursework3.io.Alerts;
-import main.coursework3.model.Bookings;
 import main.coursework3.model.Clients;
 import main.coursework3.model.Rooms;
-import main.coursework3.dao.RoomDAO;
 import main.coursework3.services.BookingService;
+
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class BookingDetailsController implements Initializable {
-    @FXML private ComboBox<Clients> cmbClient;
-    @FXML private Button btnAddNewClient;
-    @FXML private ComboBox<Rooms> cmbRoom;
-    @FXML private DatePicker dpArrivalDate;
-    @FXML private DatePicker dpDateLeaving;
-    @FXML private TextField fieldDeposit;
-    @FXML private Button btnSave;
-    @FXML private Button btnCancel;
+    @FXML
+    private ComboBox<Clients> cmbClient;
+    @FXML
+    private Button btnAddNewClient;
+    @FXML
+    private ComboBox<Rooms> cmbRoom;
+    @FXML
+    private DatePicker dpArrivalDate;
+    @FXML
+    private DatePicker dpDateLeaving;
+    @FXML
+    private TextField fieldDeposit;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnCancel;
 
     private final BookingService bookingService = new BookingService();
     private final Alerts alerts = new Alerts();
@@ -42,7 +48,10 @@ public class BookingDetailsController implements Initializable {
     private Rooms initialRoomRef = null;
     private LocalDate originalArrival = null;
     private LocalDate originalDeparture = null;
-    /** Ініціалізація контролера та налаштування елементів форми. */
+
+    /**
+     * Ініціалізація контролера та налаштування елементів форми.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refreshClientList(false);
@@ -60,7 +69,10 @@ public class BookingDetailsController implements Initializable {
 
         updateAvailableRoomsList();
     }
-    /** Заповнення форми даними існуючого бронювання. */
+
+    /**
+     * Заповнення форми даними існуючого бронювання.
+     */
     public void setInitialData(int idBooking, int idClient, Rooms initialRoom, LocalDate arrivalDate, LocalDate departureDate, double deposit) {
         this.currentBookingId = idBooking;
         this.initialRoomRef = initialRoom;
@@ -82,7 +94,10 @@ public class BookingDetailsController implements Initializable {
             }
         }
     }
-    /** Оновлення списку клієнтів у комбобоксі. */
+
+    /**
+     * Оновлення списку клієнтів у комбобоксі.
+     */
     private void refreshClientList(boolean selectNewest) {
         try {
             List<Clients> clients = bookingService.getAllClients();
@@ -98,7 +113,10 @@ public class BookingDetailsController implements Initializable {
             System.err.println("Не вдалося оновити список клієнтів: " + e.getMessage());
         }
     }
-    /** Відкриття модального вікна для додавання нового клієнта. */
+
+    /**
+     * Відкриття модального вікна для додавання нового клієнта.
+     */
     private void openNewClientModal() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/coursework3/fxml/modals/client_details_modal.fxml"));
@@ -119,15 +137,21 @@ public class BookingDetailsController implements Initializable {
             alerts.showError("Помилка завантаження", "Не вдалося відкрити вікно додавання клієнта.");
         }
     }
-    /** Налаштування відображення клієнтів та номерів у комбобоксах. */
+
+    /**
+     * Налаштування відображення клієнтів та номерів у комбобоксах.
+     */
     private void setupConverters() {
         cmbClient.setConverter(new StringConverter<>() {
             @Override
             public String toString(Clients client) {
                 return client == null ? "" : client.getPib() + " (Паспорт: " + client.getPasportNumber() + ")";
             }
+
             @Override
-            public Clients fromString(String string) { return null; }
+            public Clients fromString(String string) {
+                return null;
+            }
         });
 
         cmbRoom.setConverter(new StringConverter<>() {
@@ -135,19 +159,24 @@ public class BookingDetailsController implements Initializable {
             public String toString(Rooms room) {
                 return room == null ? "" : "№" + room.getRoomNumber() + " - " + room.getRoomClass();
             }
+
             @Override
-            public Rooms fromString(String string) { return null; }
+            public Rooms fromString(String string) {
+                return null;
+            }
         });
     }
-    /** Перевірка та збереження даних бронювання. */
+
+    /**
+     * Перевірка та збереження даних бронювання.
+     */
     private void handleSave() {
         Clients selectedClient = cmbClient.getValue();
         Rooms selectedRoom = cmbRoom.getValue();
         LocalDate arrival = dpArrivalDate.getValue();
         LocalDate departure = dpDateLeaving.getValue();
-        String depositText = fieldDeposit.getText().trim();
 
-        if (selectedClient == null || selectedRoom == null || arrival == null || departure == null || depositText.isEmpty()) {
+        if (selectedClient == null || selectedRoom == null || arrival == null || departure == null) {
             alerts.showError("Помилка заповнення", "Будь ласка, заповніть усі поля форми!");
             return;
         }
@@ -157,67 +186,44 @@ public class BookingDetailsController implements Initializable {
             return;
         }
 
-        double depositAmount;
-        try {
-            depositAmount = Double.parseDouble(depositText.replace(",", "."));
-            if (depositAmount < 0) {
-                alerts.showError("Некоректна сума", "Сума депозиту не може бути від'ємною!");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            alerts.showError("Помилка формату", "Некоректно введена сума авансового депозиту.");
+        BookingService.DepositParseResult depositResult = bookingService.parseDeposit(fieldDeposit.getText());
+        if (!depositResult.success) {
+            alerts.showError(depositResult.errorTitle, depositResult.errorMessage);
+            return;
+        }
+
+        if (!bookingService.isRoomAvailable(selectedRoom, arrival, departure, currentBookingId, initialRoomRef)) {
+            String msg = currentBookingId > 0
+                    ? "На вибрані дати цей номер уже закріплено за іншим бронюванням!"
+                    : "Неможливо створити бронювання. Цей номер уже закритий на вибрані дати!";
+            alerts.showError("Номер зайнято", msg);
             return;
         }
 
         try {
-            List<Rooms> freeRoomsOnTheseDates = bookingService.findAvailableRoomsByDates(arrival, departure);
+            BookingService.BookingSaveResult result = bookingService.saveBooking(
+                    currentBookingId, selectedClient.getIdClient(),
+                    selectedRoom, arrival, departure, depositResult.amount
+            );
 
-            boolean isRoomFree = freeRoomsOnTheseDates.stream()
-                    .anyMatch(r -> r.getIdRoom() == selectedRoom.getIdRoom());
-            if (currentBookingId > 0 && this.initialRoomRef != null) {
-                boolean isSameRoom = (selectedRoom.getIdRoom() == initialRoomRef.getIdRoom());
-
-                if (!isRoomFree && !isSameRoom) {
-                    alerts.showError("Номер зайнято", "На вибрані дати цей номер уже закріплено за іншим бронюванням!");
-                    return;
-                }
+            if (result.success) {
+                String msg = currentBookingId == 0
+                        ? "Бронювання успішно створено!"
+                        : "Параметри броні №" + currentBookingId + " успішно змінено.";
+                alerts.showMessage("Успіх", msg);
+                closeWindow(btnSave);
             } else {
-                if (!isRoomFree) {
-                    alerts.showError("Номер зайнято", "Неможливо створити бронювання. Цей номер уже закритий на вибрані дати!");
-                    return;
-                }
+                alerts.showError(result.errorTitle, result.errorMessage);
             }
-
-            Bookings booking = new Bookings();
-            booking.setIdClient(selectedClient.getIdClient());
-            booking.setIdRoom(selectedRoom.getIdRoom());
-            booking.setDateOfArrival(Date.valueOf(arrival));
-            booking.setDepartureDate(Date.valueOf(departure));
-            booking.setDepositAmount(depositAmount);
-            booking.setStatusArmor(depositAmount > 0 ? "Підтверджено" : "Очікує оплати");
-
-            if (arrival.equals(LocalDate.now())) {
-                bookingService.updateRoomStatusById(selectedRoom.getIdRoom(), RoomDAO.STATUS_BOOKED);
-            }
-
-            if (currentBookingId == 0) {
-                bookingService.insertBooking(booking);
-                alerts.showMessage("Успіх", "Бронювання успішно створено!");
-            } else {
-                booking.setIdBooking(currentBookingId);
-                bookingService.updateBooking(booking);
-                alerts.showMessage("Успіх", "Параметри броні №" + currentBookingId + " успішно змінено.");
-            }
-
-            bookingService.runAutoUpdate();
-            closeWindow(btnSave);
-
         } catch (Exception e) {
             e.printStackTrace();
             alerts.showError("Помилка БД", "Не вдалося зберегти картку бронювання:\n" + e.getMessage());
         }
     }
-    /** Оновлення списку доступних номерів за вибраними датами. */
+
+    /**
+     * Оновлення списку доступних номерів за вибраними датами.
+     */
     private void updateAvailableRoomsList() {
         LocalDate arrival = dpArrivalDate.getValue();
         LocalDate departure = dpDateLeaving.getValue();
@@ -257,7 +263,10 @@ public class BookingDetailsController implements Initializable {
             System.err.println("Помилка при розрахунку доступних номерів: " + e.getMessage());
         }
     }
-    /** Закриття поточного модального вікна. */
+
+    /**
+     * Закриття поточного модального вікна.
+     */
     private void closeWindow(Button sourceButton) {
         if (sourceButton != null && sourceButton.getScene() != null) {
             Stage stage = (Stage) sourceButton.getScene().getWindow();

@@ -112,13 +112,16 @@
         </GridPane>
         <GridPane hgap="10" vgap="10">
             <Label text="Загальна вартість:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <Label fx:id="lblTotalCost" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblTotalCost" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                   style="-fx-font-weight: bold;"/>
 
             <Label text="Враховано депозиту:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <Label fx:id="lblDepositUsed" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+            <Label fx:id="lblDepositUsed" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                   style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
 
             <Label text="До сплати при виселенні:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <Label fx:id="lblFinalPayment" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-text-fill: #c0392b; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblFinalPayment" text="0.00 грн" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                   style="-fx-text-fill: #c0392b; -fx-font-size: 14px; -fx-font-weight: bold;"/>
         </GridPane>
 
         <HBox alignment="CENTER_RIGHT" spacing="15.0" VBox.vgrow="ALWAYS">

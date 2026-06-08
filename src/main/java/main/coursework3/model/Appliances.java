@@ -8,12 +8,12 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class Appliances {
-  private int idAppliance;
-  private String name;
-  private String technicalCondition;
+    private int idAppliance;
+    private String name;
+    private String technicalCondition;
 
-  @Override
-  public String toString() {
-    return "Ім'я: " + name + " Технічний стан: " + technicalCondition;
-  }
+    @Override
+    public String toString() {
+        return "Ім'я: " + name + " Технічний стан: " + technicalCondition;
+    }
 }

@@ -17,7 +17,8 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="550.0" prefWidth="450.0" styleClass="content-area" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.coursework3.controllers.modals.RoomDetailsController">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.coursework3.controllers.modals.RoomDetailsController">
     <stylesheets>
         <URL value="@../../css/style.css"/>
     </stylesheets>
@@ -77,16 +78,20 @@
         </TableView>
 
         <HBox spacing="10.0">
-            <Button fx:id="btnAddAppliance" mnemonicParsing="false" onAction="#handleAddAppliance" text="➕ Додати прилад"/>
-            <Button fx:id="btnRemoveAppliance" mnemonicParsing="false" onAction="#handleRemoveAppliance" text="🗑️ Видалити"/>
+            <Button fx:id="btnAddAppliance" mnemonicParsing="false" onAction="#handleAddAppliance"
+                    text="➕ Додати прилад"/>
+            <Button fx:id="btnRemoveAppliance" mnemonicParsing="false" onAction="#handleRemoveAppliance"
+                    text="🗑️ Видалити"/>
         </HBox>
 
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
             <padding>
                 <Insets top="10.0"/>
             </padding>
-            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" styleClass="btn-logout" text="Скасувати"/>
-            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSave" styleClass="btn-action" text="Зберегти"/>
+            <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" styleClass="btn-logout"
+                    text="Скасувати"/>
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSave" styleClass="btn-action"
+                    text="Зберегти"/>
         </HBox>
     </VBox>
 </AnchorPane>
