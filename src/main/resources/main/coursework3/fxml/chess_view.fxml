@@ -36,10 +36,8 @@
                 <ComboBox fx:id="comboMonth" prefWidth="130.0" promptText="Місяць"/>
                 <ComboBox fx:id="comboYear" prefWidth="100.0" promptText="Рік"/>
                 <Button fx:id="btnPrint" mnemonicParsing="false" styleClass="btn-action" text="📊 Фінансовий звіт"/>
-                <Button fx:id="btnOpReport" mnemonicParsing="false" styleClass="btn-action" text="🏨 Операційний звіт"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
-                <Button fx:id="btnBusinessReport" mnemonicParsing="false" styleClass="btn-action"
-                        text="🏨 Розгорнутий звіт" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                <Button fx:id="btnOpReport" mnemonicParsing="false" styleClass="btn-action" text="🏨 Операційний звіт"/>
+                <Button fx:id="btnBusinessReport" mnemonicParsing="false" styleClass="btn-action" text="🏨 Розгорнутий звіт" />
             </HBox>
         </HBox>
 

@@ -1,123 +1,333 @@
+/* =============================================================
+   MINIMALIST MODERN THEME FOR HOTEL MANAGEMENT SYSTEM
+   Palette: Slate + Blue, rounded 8px, clean shadows
+   ============================================================= */
+
+/* ----- ROOT & BASE (global overrides) ----- */
+.root {
+    -fx-font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* ----- LAYOUT ----- */
+.sidebar {
+    -fx-background-color: #0f172a;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 10, 0, 2, 0);
+}
 
 .content-area {
-    -fx-background-color: #ecf0f1;
+    -fx-background-color: #f1f5f9;
 }
 
-.sidebar {
-    -fx-background-color: #2c3e50;
-}
-
+/* ----- NAVIGATION / SIDEBAR BUTTONS ----- */
 .menu-button {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
     -fx-alignment: center-left;
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 10 0 10 20;
+    -fx-background-radius: 0;
 }
 
 .menu-button:hover {
-    -fx-background-color: #34495e;
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-text-fill: white;
     -fx-cursor: hand;
 }
 
-.btn-logout {
-    -fx-background-color: #e74c3c;
+.menu-button-active {
+    -fx-background-color: rgba(59, 130, 246, 0.15);
     -fx-text-fill: white;
-    -fx-background-radius: 5;
+    -fx-border-color: #3b82f6;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-style: solid;
 }
 
-.btn-logout:hover {
-    -fx-background-color: #c0392b;
+/* ----- BUTTONS (base + variants) ----- */
+.button, .btn-action, .btn-success, .btn-warning, .btn-cancel, .btn-danger, .btn-logout {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-transition: all 0.15s ease;
 }
 
 .btn-action {
-    -fx-background-color: #3498db;
+    -fx-background-color: #3b82f6;
     -fx-text-fill: white;
-    -fx-background-radius: 3;
+    -fx-border: none;
 }
 
 .btn-action:hover {
-    -fx-background-color: #2980b9;
-}
-
-.table-view {
-    -fx-background-color: transparent;
-    -fx-base: #ecf0f1;
-    -fx-control-inner-background: #ffffff;
-    -fx-table-cell-border-color: #bdc3c7;
-}
-
-.table-view .column-header {
-    -fx-background-color: #34495e;
-}
-
-.table-view .column-header .label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-}
-
-.chess-cell {
-    -fx-min-width: 35px;
-    -fx-min-height: 35px;
-    -fx-alignment: center;
-    -fx-border-color: #bdc3c7;
-    -fx-font-size: 11px;
-}
-
-.room-header-cell {
-    -fx-background-color: #34495e;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-min-width: 80px;
-}
-
-.date-header-cell {
-    -fx-background-color: #f8f9fa;
-    -fx-font-weight: bold;
-}
-
-.status-free {
-    -fx-background-color: #2ecc71;
-}
-
-.status-occupied {
-    -fx-background-color: #e74c3c;
-}
-
-.status-booked {
-    -fx-background-color: #f1c40f;
-}
-
-.status-repair {
-    -fx-background-color: #95a5a6;
-}
-
-.btn-cancel {
-    -fx-background-color: #bdc3c7;
-    -fx-text-fill: white;
-    -fx-background-radius: 3;
-}
-
-.btn-cancel:hover {
-    -fx-background-color: #95a5a6;
+    -fx-background-color: #2563eb;
 }
 
 .btn-success {
-    -fx-background-color: #2ecc71;
-    -fx-text-fill: white;
-    -fx-background-radius: 3;
+    -fx-background-color: #f0fdf4;
+    -fx-text-fill: #166534;
+    -fx-border-color: #bbf7d0;
+    -fx-border-width: 1;
 }
 
 .btn-success:hover {
-    -fx-background-color: #27ae60;
+    -fx-background-color: #dcfce7;
+    -fx-border-color: #86efac;
 }
 
 .btn-warning {
-    -fx-background-color: #e67e22;
-    -fx-text-fill: white;
-    -fx-background-radius: 3;
+    -fx-background-color: #fffbeb;
+    -fx-text-fill: #b45309;
+    -fx-border-color: #fde68a;
+    -fx-border-width: 1;
 }
 
 .btn-warning:hover {
-    -fx-background-color: #d35400;
+    -fx-background-color: #fef3c7;
+    -fx-border-color: #fcd34d;
+}
+
+.btn-cancel {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #334155;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+}
+
+.btn-cancel:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-border-color: #cbd5e1;
+}
+
+.btn-danger {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #b91c1c;
+    -fx-border-color: #fecaca;
+    -fx-border-width: 1;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #fee2e2;
+    -fx-border-color: #fca5a5;
+}
+
+.btn-logout {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border: none;
+}
+
+.btn-logout:hover {
+    -fx-background-color: #b91c1c;
+}
+
+/* ----- TABLE VIEW ----- */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.03), 6, 0, 0, 2);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 12 0 8 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #475569;
+    -fx-font-weight: 600;
+    -fx-font-size: 11px;
+    -fx-letter-spacing: 0.3px;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #eff6ff;
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell:selected .text {
+    -fx-fill: #0f172a;
+}
+
+.table-view .table-cell {
+    -fx-padding: 12 14 12 14;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: transparent;
+}
+
+/* ----- CHESS GRID (booking matrix) ----- */
+.chess-cell {
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-alignment: center;
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 0.5;
+    -fx-font-size: 11px;
+    -fx-font-weight: 500;
+}
+
+.room-header-cell {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #334155;
+    -fx-font-weight: 600;
+    -fx-font-size: 12px;
+    -fx-min-width: 90px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 1 1 0;
+    -fx-padding: 10 8;
+}
+
+.date-header-cell {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #334155;
+    -fx-font-weight: 600;
+    -fx-font-size: 11px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 1;
+    -fx-padding: 10 6;
+    -fx-alignment: center;
+}
+
+/* Status backgrounds (subtle pastel) */
+.status-free {
+    -fx-background-color: #f0fdf4;
+}
+.status-occupied {
+    -fx-background-color: #fef2f2;
+}
+.status-booked {
+    -fx-background-color: #fffbeb;
+}
+.status-repair {
+    -fx-background-color: #f1f5f9;
+}
+
+/* Status text badges */
+.badge-free {
+    -fx-text-fill: #15803d;
+    -fx-font-weight: 600;
+}
+.badge-occupied {
+    -fx-text-fill: #b91c1c;
+    -fx-font-weight: 600;
+}
+.badge-booked {
+    -fx-text-fill: #b45309;
+    -fx-font-weight: 600;
+}
+.badge-repair {
+    -fx-text-fill: #475569;
+    -fx-font-weight: 600;
+}
+
+/* ----- LIST VIEW (simple room/guest list) ----- */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 10 12;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+}
+
+.list-cell:hover {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: transparent;
+}
+
+.list-cell:selected {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #0f172a;
+}
+
+.list-view:focused {
+    -fx-background-color: transparent;
+}
+
+/* ----- COMBOBOX (modern dropdown) ----- */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 2 8;
+}
+
+.combo-box:hover {
+    -fx-border-color: #94a3b8;
+}
+
+.combo-box:focused {
+    -fx-border-color: #3b82f6;
+    -fx-border-width: 1.5;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-padding: 4;
+}
+
+.combo-box-base > .label {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-padding: 4 0;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: white !important;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e2e8f0 !important;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 12, 0, 0, 4);
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: white !important;
+    -fx-text-fill: #0f172a !important;
+    -fx-font-size: 13px;
+    -fx-padding: 10 14 !important;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #f1f5f9 !important;
+    -fx-text-fill: #1e293b !important;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #3b82f6 !important;
+    -fx-text-fill: white !important;
 }
